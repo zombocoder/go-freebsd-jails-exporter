@@ -42,6 +42,8 @@ github.com/xhit/go-str2duration/v2 v2.1.0 h1:lxklc02Drh6ynqX+DdPyp5pCKLUQpRT8bp8
 github.com/xhit/go-str2duration/v2 v2.1.0/go.mod h1:ohY8p+0f07DiV6Em5LKB0s2YpLtXVyJfNt1+BlmyAsU=
 github.com/zombocoder/go-freebsd-jail v1.0.0 h1:QwQbon4gExjH8n9PWytjJNhXi4ehR/cM+45/8QQTMEU=
 github.com/zombocoder/go-freebsd-jail v1.0.0/go.mod h1:FYCDxByrFg1ZUSz2+5kZyNLtXCnVSaZ8+LbjBem8nEs=
+github.com/zombocoder/go-freebsd-libzfs v0.1.0 h1:bUKKMhfb7JgFrNDKLSYsiZTWCS9YAZxdJdQCyooR5z8=
+github.com/zombocoder/go-freebsd-libzfs v0.1.0/go.mod h1:DoUzdjK4qR3XYuEnzPHcjn9daBzZDTVxQqDHL6R1P7g=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
 go.uber.org/goleak v1.3.0/go.mod h1:CoHD4mav9JJNrW/WLlf7HGZPjdw8EucARQHekz1X6bE=
 go.yaml.in/yaml/v2 v2.4.2 h1:DzmwEr2rDGHl7lsFgAHxmNz/1NlQ7xLIrlN2h5d1eGI=

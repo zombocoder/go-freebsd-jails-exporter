@@ -37,6 +37,7 @@ The exporter must run as root (or via `doas`/`sudo`) to read process information
 | `--collector.jails.enabled` | `true` | Enable jails collector |
 | `--collector.processes.enabled` | `true` | Enable processes collector |
 | `--collector.racct.enabled` | `true` | Enable RACCT collector |
+| `--collector.zfs.enabled` | `true` | Enable ZFS collector |
 | `--collector.timeout` | `5s` | Collector scrape timeout |
 
 ### Endpoints
@@ -98,19 +99,42 @@ kern.racct.enable=1
 
 | Metric | Type | Description |
 |--------|------|-------------|
+| `freebsd_jail_racct_cpu_time_seconds` | gauge | CPU time consumed |
+| `freebsd_jail_racct_cpu_percent` | gauge | CPU usage percentage |
 | `freebsd_jail_racct_memory_used_bytes` | gauge | Memory usage |
-| `freebsd_jail_racct_memory_limit_bytes` | gauge | Memory limit |
+| `freebsd_jail_racct_memory_locked_bytes` | gauge | Locked memory |
 | `freebsd_jail_racct_vmemory_used_bytes` | gauge | Virtual memory usage |
 | `freebsd_jail_racct_swap_used_bytes` | gauge | Swap usage |
 | `freebsd_jail_racct_processes` | gauge | Process count |
-| `freebsd_jail_racct_process_limit` | gauge | Process limit |
 | `freebsd_jail_racct_threads` | gauge | Thread count |
 | `freebsd_jail_racct_open_files` | gauge | Open file descriptors |
-| `freebsd_jail_racct_cpu_percent` | gauge | CPU usage percentage |
+| `freebsd_jail_racct_datasize_bytes` | gauge | Data segment size |
+| `freebsd_jail_racct_stacksize_bytes` | gauge | Stack size |
+| `freebsd_jail_racct_pseudoterminals` | gauge | Pseudo-terminals |
+| `freebsd_jail_racct_wallclock_seconds` | gauge | Wall clock time |
 | `freebsd_jail_racct_read_bytes_per_second` | gauge | Read throughput |
 | `freebsd_jail_racct_write_bytes_per_second` | gauge | Write throughput |
 | `freebsd_jail_racct_read_iops` | gauge | Read IOPS |
 | `freebsd_jail_racct_write_iops` | gauge | Write IOPS |
+
+### ZFS
+
+Uses [`go-freebsd-libzfs`](https://github.com/zombocoder/go-freebsd-libzfs) library to read ZFS dataset properties for each jail's filesystem path. Automatically maps jail paths to ZFS datasets.
+
+| Metric | Type | Extra Labels | Description |
+|--------|------|--------------|-------------|
+| `freebsd_jail_zfs_used_bytes` | gauge | `dataset` | Space used by the dataset |
+| `freebsd_jail_zfs_available_bytes` | gauge | `dataset` | Space available to the dataset |
+| `freebsd_jail_zfs_referenced_bytes` | gauge | `dataset` | Space referenced by the dataset |
+| `freebsd_jail_zfs_logical_used_bytes` | gauge | `dataset` | Logical space used |
+| `freebsd_jail_zfs_quota_bytes` | gauge | `dataset` | Dataset quota (0 = none) |
+| `freebsd_jail_zfs_refquota_bytes` | gauge | `dataset` | Reference quota (0 = none) |
+| `freebsd_jail_zfs_reservation_bytes` | gauge | `dataset` | Reservation (0 = none) |
+| `freebsd_jail_zfs_refreservation_bytes` | gauge | `dataset` | Reference reservation (0 = none) |
+| `freebsd_jail_zfs_compressratio` | gauge | `dataset` | Compression ratio (1.0 = none) |
+| `freebsd_jail_zfs_used_by_snapshots_bytes` | gauge | `dataset` | Space used by snapshots |
+| `freebsd_jail_zfs_used_by_dataset_bytes` | gauge | `dataset` | Space used by the dataset itself |
+| `freebsd_jail_zfs_used_by_children_bytes` | gauge | `dataset` | Space used by children |
 
 ### Exporter
 
@@ -120,6 +144,21 @@ kern.racct.enable=1
 | `freebsd_jails_exporter_scrape_duration_seconds` | gauge | Scrape duration per collector |
 | `freebsd_jails_exporter_scrape_errors_total` | counter | Scrape errors per collector |
 | `freebsd_jails_exporter_collector_enabled` | gauge | Whether a collector is enabled |
+
+## Grafana Dashboard
+
+Import `grafana/dashboard.json` into Grafana. The dashboard includes:
+
+- Overview stats (total jails, active/dying, processes, threads, memory)
+- Jail inventory table
+- Memory, virtual memory, and swap usage graphs
+- Process and thread counts with state breakdown
+- I/O throughput and IOPS
+- RACCT resources (open files, CPU usage)
+- ZFS usage, available space, referenced, compression ratio, and quota vs used
+- Exporter health (scrape duration, errors)
+
+All panels support filtering by Host, Jail, and Process State variables.
 
 ## rc.d Service
 

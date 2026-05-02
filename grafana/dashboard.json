@@ -1,58 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "10.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "barchart",
-      "name": "Bar chart",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "piechart",
-      "name": "Pie chart",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -80,7 +26,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -107,7 +53,7 @@
       "type": "stat",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "count(freebsd_jail_info{host=~\"$host\"})",
           "legendFormat": "",
           "refId": "A"
@@ -115,7 +61,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -142,7 +88,7 @@
       "type": "stat",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "count(freebsd_jail_state{host=~\"$host\", state=\"active\"} == 1)",
           "legendFormat": "",
           "refId": "A"
@@ -150,7 +96,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -178,7 +124,7 @@
       "type": "stat",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "count(freebsd_jail_state{host=~\"$host\", state=\"dying\"} == 1) or vector(0)",
           "legendFormat": "",
           "refId": "A"
@@ -186,7 +132,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -213,7 +159,7 @@
       "type": "stat",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "sum(freebsd_jail_processes{host=~\"$host\", name=~\"$jail\"})",
           "legendFormat": "",
           "refId": "A"
@@ -221,7 +167,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -248,7 +194,7 @@
       "type": "stat",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "sum(freebsd_jail_threads{host=~\"$host\", name=~\"$jail\"})",
           "legendFormat": "",
           "refId": "A"
@@ -256,7 +202,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "thresholds" },
@@ -284,7 +230,7 @@
       "type": "stat",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "sum(freebsd_jail_racct_memory_used_bytes{host=~\"$host\", name=~\"$jail\"})",
           "legendFormat": "",
           "refId": "A"
@@ -299,7 +245,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {},
         "overrides": [
@@ -323,7 +269,7 @@
       "type": "table",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_info{host=~\"$host\", name=~\"$jail\"}",
           "format": "table",
           "instant": true,
@@ -372,7 +318,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -403,7 +349,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_memory_used_bytes{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -411,7 +357,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -442,7 +388,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_vmemory_used_bytes{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -450,7 +396,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -481,7 +427,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_swap_used_bytes{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -489,7 +435,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -500,19 +446,23 @@
       "gridPos": { "h": 8, "w": 12, "x": 12, "y": 23 },
       "id": 23,
       "options": {
-        "displayLabels": ["name", "percent"],
-        "legend": { "displayMode": "table", "placement": "right", "values": ["value"] },
-        "pieType": "donut",
+        "displayMode": "gradient",
+        "minVizWidth": 0,
+        "minVizHeight": 10,
+        "namePlacement": "auto",
+        "orientation": "horizontal",
         "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
-        "tooltip": { "mode": "single", "sort": "none" }
+        "showUnfilled": true,
+        "valueMode": "color"
       },
-      "title": "Memory Distribution",
-      "type": "piechart",
+      "title": "Memory Distribution (Top 20)",
+      "type": "bargauge",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
-          "expr": "freebsd_jail_racct_memory_used_bytes{host=~\"$host\", name=~\"$jail\"}",
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+          "expr": "topk(20, freebsd_jail_racct_memory_used_bytes{host=~\"$host\", name=~\"$jail\"})",
           "legendFormat": "{{name}}",
+          "instant": true,
           "refId": "A"
         }
       ]
@@ -525,7 +475,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -556,7 +506,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_processes{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -564,7 +514,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -595,7 +545,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_threads{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -603,7 +553,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -633,7 +583,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_processes_by_state{host=~\"$host\", name=~\"$jail\", state=~\"$state\"}",
           "legendFormat": "{{host}}/{{name}} ({{state}})",
           "refId": "A"
@@ -648,7 +598,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -679,7 +629,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_read_bytes_per_second{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -687,7 +637,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -718,7 +668,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_write_bytes_per_second{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -726,7 +676,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -758,7 +708,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_read_iops{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -766,7 +716,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -798,7 +748,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_write_iops{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -813,7 +763,7 @@
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -844,7 +794,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_open_files{host=~\"$host\", name=~\"$jail\"}",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -852,7 +802,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -884,7 +834,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jail_racct_cpu_percent{host=~\"$host\", name=~\"$jail\"} / 100",
           "legendFormat": "{{host}}/{{name}}",
           "refId": "A"
@@ -894,12 +844,220 @@
     {
       "collapsed": false,
       "gridPos": { "h": 1, "w": 24, "x": 0, "y": 74 },
+      "id": 107,
+      "title": "ZFS",
+      "type": "row"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisLabel": "",
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" }
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 75 },
+      "id": 70,
+      "options": {
+        "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "bottom" },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "title": "ZFS Used per Jail",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+          "expr": "freebsd_jail_zfs_used_bytes{host=~\"$host\", name=~\"$jail\"}",
+          "legendFormat": "{{host}}/{{name}} ({{dataset}})",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisLabel": "",
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" }
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 75 },
+      "id": 71,
+      "options": {
+        "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "bottom" },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "title": "ZFS Available per Jail",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+          "expr": "freebsd_jail_zfs_available_bytes{host=~\"$host\", name=~\"$jail\"}",
+          "legendFormat": "{{host}}/{{name}} ({{dataset}})",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisLabel": "",
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" }
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 83 },
+      "id": 72,
+      "options": {
+        "legend": { "calcs": ["lastNotNull", "max"], "displayMode": "table", "placement": "bottom" },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "title": "ZFS Referenced per Jail",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+          "expr": "freebsd_jail_zfs_referenced_bytes{host=~\"$host\", name=~\"$jail\"}",
+          "legendFormat": "{{host}}/{{name}} ({{dataset}})",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisLabel": "",
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" }
+          },
+          "min": 0
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 83 },
+      "id": 73,
+      "options": {
+        "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom" },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "title": "ZFS Compression Ratio per Jail",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+          "expr": "freebsd_jail_zfs_compressratio{host=~\"$host\", name=~\"$jail\"}",
+          "legendFormat": "{{host}}/{{name}} ({{dataset}})",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisLabel": "",
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": { "group": "A", "mode": "none" }
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 91 },
+      "id": 74,
+      "options": {
+        "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom" },
+        "tooltip": { "mode": "multi", "sort": "desc" }
+      },
+      "title": "ZFS Quota per Jail",
+      "type": "timeseries",
+      "targets": [
+        {
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+          "expr": "freebsd_jail_zfs_quota_bytes{host=~\"$host\", name=~\"$jail\"} > 0",
+          "legendFormat": "quota {{host}}/{{name}}",
+          "refId": "A"
+        },
+        {
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
+          "expr": "freebsd_jail_zfs_used_bytes{host=~\"$host\", name=~\"$jail\"}",
+          "legendFormat": "used {{host}}/{{name}}",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "collapsed": false,
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 99 },
       "id": 106,
       "title": "Exporter Health",
       "type": "row"
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -920,7 +1078,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 75 },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 100 },
       "id": 60,
       "options": {
         "legend": { "calcs": ["lastNotNull", "mean", "max"], "displayMode": "table", "placement": "bottom" },
@@ -930,7 +1088,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jails_exporter_scrape_duration_seconds",
           "legendFormat": "{{collector}}",
           "refId": "A"
@@ -938,7 +1096,7 @@
       ]
     },
     {
-      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
       "fieldConfig": {
         "defaults": {
           "color": { "mode": "palette-classic" },
@@ -959,7 +1117,7 @@
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 75 },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 100 },
       "id": 61,
       "options": {
         "legend": { "calcs": ["lastNotNull"], "displayMode": "table", "placement": "bottom" },
@@ -969,7 +1127,7 @@
       "type": "timeseries",
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+          "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
           "expr": "freebsd_jails_exporter_scrape_errors_total",
           "legendFormat": "{{collector}}",
           "refId": "A"
@@ -984,7 +1142,7 @@
     "list": [
       {
         "current": {},
-        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
         "definition": "label_values(freebsd_jail_info, host)",
         "hide": 0,
         "includeAll": true,
@@ -1001,7 +1159,7 @@
       },
       {
         "current": {},
-        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
         "definition": "label_values(freebsd_jail_info{host=~\"$host\"}, name)",
         "hide": 0,
         "includeAll": true,
@@ -1018,7 +1176,7 @@
       },
       {
         "current": {},
-        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "datasource": { "type": "prometheus", "uid": "PROMETHEUS" },
         "definition": "label_values(freebsd_jail_processes_by_state, state)",
         "hide": 0,
         "includeAll": true,

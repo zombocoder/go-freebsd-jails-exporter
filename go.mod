@@ -6,6 +6,7 @@ require (
 	github.com/alecthomas/kingpin/v2 v2.4.0
 	github.com/prometheus/client_golang v1.23.2
 	github.com/zombocoder/go-freebsd-jail v1.0.0
+	github.com/zombocoder/go-freebsd-libzfs v0.1.0
 )
 
 require (

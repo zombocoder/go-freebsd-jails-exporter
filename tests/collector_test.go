@@ -77,6 +77,7 @@ func TestRegistryCollect(t *testing.T) {
 		collector.NewJailsCollector(logger, "testhost"),
 		collector.NewProcessesCollector(logger, "testhost"),
 		collector.NewRACCTCollector(logger, "testhost"),
+		collector.NewZFSCollector(logger, "testhost"),
 	)
 
 	promReg := prometheus.NewRegistry()
