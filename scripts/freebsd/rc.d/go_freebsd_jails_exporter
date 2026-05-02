@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# PROVIDE: go_freebsd_jails_exporter
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="go_freebsd_jails_exporter"
+rcvar="${name}_enable"
+
+load_rc_config $name
+
+: ${go_freebsd_jails_exporter_enable:="NO"}
+: ${go_freebsd_jails_exporter_user:="root"}
+: ${go_freebsd_jails_exporter_group:="wheel"}
+: ${go_freebsd_jails_exporter_listen:=":9756"}
+: ${go_freebsd_jails_exporter_log_level:="info"}
+: ${go_freebsd_jails_exporter_log_format:="logfmt"}
+: ${go_freebsd_jails_exporter_flags:=""}
+: ${go_freebsd_jails_exporter_pidfile:="/var/run/${name}.pid"}
+
+pidfile="${go_freebsd_jails_exporter_pidfile}"
+procname="/usr/local/bin/go-freebsd-jails-exporter"
+
+command="/usr/sbin/daemon"
+command_args="-f -p ${pidfile} -u ${go_freebsd_jails_exporter_user} \
+	${procname} \
+	--web.listen-address=${go_freebsd_jails_exporter_listen} \
+	--log.level=${go_freebsd_jails_exporter_log_level} \
+	--log.format=${go_freebsd_jails_exporter_log_format} \
+	${go_freebsd_jails_exporter_flags}"
+
+run_rc_command "$1"
