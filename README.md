@@ -182,4 +182,4 @@ CGO_ENABLED=1 go test ./...
 
 ## License
 
-BSD-2-Clause
+BSD-2-Clause. See [LICENSE](LICENSE).
