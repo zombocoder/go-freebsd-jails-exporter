@@ -4,6 +4,9 @@ Prometheus exporter for FreeBSD jails using native cgo bindings. No shell comman
 
 All metrics include a `host` label (system hostname) so jails can be distinguished across multiple hosts in Prometheus/Grafana.
 
+<img width="3432" height="1266" alt="image" src="https://github.com/user-attachments/assets/a8706010-4038-41bd-a09b-2b4c4e9f6192" />
+
+
 ## Requirements
 
 - FreeBSD 13+ (optimized for 14.x)
