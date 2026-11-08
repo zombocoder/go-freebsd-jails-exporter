@@ -1,0 +1,94 @@
+name: Bug report
+description: The exporter fails to build, crashes, or reports wrong or missing metrics
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please check existing issues and the README's
+        [Requirements](https://github.com/zombocoder/go-freebsd-jails-exporter#requirements) first;
+        most build errors (e.g. `libshare.h` not found) come from a missing `/usr/src`.
+        For security problems, use [private reporting](https://github.com/zombocoder/go-freebsd-jails-exporter/security/advisories/new) instead.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Build
+        - Jails collector
+        - Processes collector
+        - RACCT collector
+        - ZFS collector
+        - Grafana dashboard
+        - rc.d service
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead? For wrong values, say which metric and what you compared it with (e.g. `ps -J`, `rctl -u`, `zfs list`).
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Logs, errors and metric output
+      description: Build errors, exporter log (ideally with `--log.level=debug`), and the relevant lines from `/metrics`. Remove anything you consider private.
+      render: shell
+
+  - type: input
+    id: freebsd
+    attributes:
+      label: FreeBSD version
+      description: Output of `freebsd-version -ku`
+      placeholder: "15.1-RELEASE-p6 15.1-RELEASE-p6"
+    validations:
+      required: true
+
+  - type: input
+    id: exporter
+    attributes:
+      label: Exporter version
+      description: Output of `go-freebsd-jails-exporter --version`, or the commit you built
+    validations:
+      required: true
+
+  - type: input
+    id: go
+    attributes:
+      label: Go version
+      description: Output of `go version` (if you built it yourself)
+
+  - type: input
+    id: jail-manager
+    attributes:
+      label: How are jails managed?
+      description: e.g. jail.conf, Bastille, Sylve, iocage, pot, AppJail
+    validations:
+      required: true
+
+  - type: dropdown
+    id: root
+    attributes:
+      label: Is the exporter running as root?
+      options:
+        - "yes"
+        - "no"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: racct
+    attributes:
+      label: Is RACCT enabled (`sysctl kern.racct.enable`)?
+      options:
+        - "yes (1)"
+        - "no (0)"
+        - "don't know"
+    validations:
+      required: true

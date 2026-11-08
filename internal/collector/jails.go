@@ -112,7 +112,7 @@ func (c *JailsCollector) Collect(ctx context.Context, ch chan<- prometheus.Metri
 		// Persist from library's Params map as fallback.
 		persist := extra.Persist
 		if !persist {
-			if p, ok := j.Params["persist"]; ok && p == "1" {
+			if p, ok := j.Params["persist"]; ok && freebsd.ParseJailBool(p) {
 				persist = true
 			}
 		}

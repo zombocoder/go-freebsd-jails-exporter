@@ -1,0 +1,88 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    # Fast checks on Linux. The internal/freebsd package has stubs for other
+    # platforms, so vet and the platform-independent tests work here too; the
+    # cgo code and the remaining tests are covered by the FreeBSD jobs below.
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Check formatting
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "::error::These files are not gofmt-formatted (run 'gofmt -w .'):"
+            echo "$unformatted"
+            exit 1
+          fi
+
+      - name: Check go.mod is tidy
+        run: go mod tidy -diff
+
+      - name: Vet
+        run: go vet ./...
+
+      - name: Unit tests
+        run: go test -count=1 ./...
+
+      - name: Validate Grafana dashboard JSON
+        run: jq empty grafana/dashboard.json
+
+  freebsd:
+    # The exporter uses cgo against libjail, libzfs and sysctl, so it is built
+    # and tested inside a FreeBSD VM running under QEMU on the Linux runner.
+    # The smoke test runs as root, creates a throwaway pool and jail, and
+    # checks the metrics end to end; the VM is discarded afterwards.
+    name: FreeBSD ${{ matrix.release }}
+    runs-on: ubuntu-latest
+    # A normal run takes a few minutes; occasionally the VM hangs while booting
+    # under nested virtualization. Fail fast so the job can be re-run.
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        release: ["14.5", "15.1"]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Build and test in FreeBSD VM
+        uses: vmactions/freebsd-vm@v1.5.9
+        env:
+          REVISION: ${{ github.sha }}
+        with:
+          release: ${{ matrix.release }}
+          envs: REVISION
+          copyback: false
+          cache-after-prepare: true
+          cache-after-prepare-key-suffix: ${{ hashFiles('.github/scripts/freebsd-ci-prepare.sh') }}
+          prepare: |
+            sh .github/scripts/freebsd-ci-prepare.sh
+          run: |
+            set -e
+            export GOFLAGS=-buildvcs=false
+            freebsd-version -ku
+            go version
+            make vet
+            make test
+            make build REVISION="$(echo "$REVISION" | cut -c1-7)"
+            sh .github/scripts/freebsd-ci-smoke.sh ./go-freebsd-jails-exporter

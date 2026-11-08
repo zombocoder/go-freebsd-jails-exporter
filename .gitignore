@@ -17,3 +17,6 @@ vendor/
 *.test
 *.out
 coverage.txt
+
+# Release builds
+/dist/

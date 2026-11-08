@@ -1,0 +1,32 @@
+name: Feature request
+description: Suggest a new metric, collector, dashboard panel or other improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What do you want to monitor or do?
+      description: The question you want to answer about your jails, and why the current metrics do not cover it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: source
+    attributes:
+      label: Where does the data come from?
+      description: If you know it, the command, sysctl or API that shows this today (e.g. `rctl -u jail:web`, `sysctl security.jail.param`, `zfs get`).
+      render: shell
+
+  - type: textarea
+    id: metric
+    attributes:
+      label: Proposed metric(s)
+      description: Rough names, labels and types are fine, e.g. `freebsd_jail_netif_rx_bytes_total{interface}` (counter).
+      render: text
+
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to implement this myself

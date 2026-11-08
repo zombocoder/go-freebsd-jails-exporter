@@ -52,7 +52,7 @@ import (
 type ProcState int
 
 const (
-	ProcStateRunning  ProcState = iota
+	ProcStateRunning ProcState = iota
 	ProcStateSleeping
 	ProcStateStopped
 	ProcStateZombie

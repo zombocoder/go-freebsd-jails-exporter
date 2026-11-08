@@ -1,0 +1,112 @@
+name: Release
+
+# Pushing a tag like v0.3.0 builds release tarballs on every supported FreeBSD
+# major version and publishes them to a GitHub release. The binary links
+# against the base system's libjail and libzfs, so each FreeBSD major version
+# gets its own build.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to (re)build, e.g. v0.3.0
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build FreeBSD ${{ matrix.release }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: true
+      matrix:
+        # Build on the oldest supported minor of each major version.
+        release: ["14.5", "15.1"]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - name: Resolve version
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if ! printf '%s' "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.]+)?$'; then
+            echo "::error::'$TAG' is not a release tag like v1.2.3"
+            exit 1
+          fi
+          echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+          echo "REVISION=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
+
+      - name: Build in FreeBSD VM
+        uses: vmactions/freebsd-vm@v1.5.9
+        with:
+          release: ${{ matrix.release }}
+          envs: VERSION REVISION
+          copyback: true
+          cache-after-prepare: true
+          cache-after-prepare-key-suffix: ${{ hashFiles('.github/scripts/freebsd-ci-prepare.sh') }}
+          prepare: |
+            sh .github/scripts/freebsd-ci-prepare.sh
+          run: |
+            set -e
+            export GOFLAGS=-buildvcs=false
+            make test
+            make dist VERSION="$VERSION" REVISION="$REVISION"
+            ./go-freebsd-jails-exporter --version
+            sh .github/scripts/freebsd-ci-smoke.sh ./go-freebsd-jails-exporter
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist-freebsd-${{ matrix.release }}
+          path: |
+            dist/*.tar.gz
+            dist/*.sha256
+          if-no-files-found: error
+
+  publish:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/download-artifact@v8
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Extract release notes from CHANGELOG.md
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" { found = 1; next }
+            found && /^## \[/ { exit }
+            found { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "See [CHANGELOG.md](CHANGELOG.md)." > notes.md
+          fi
+          cat notes.md
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/* --clobber
+          else
+            gh release create "$TAG" dist/* --title "$TAG" --notes-file notes.md --verify-tag
+          fi
