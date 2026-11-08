@@ -1,5 +1,13 @@
 # go-freebsd-jails-exporter
 
+[![CI](https://github.com/zombocoder/go-freebsd-jails-exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/zombocoder/go-freebsd-jails-exporter/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/zombocoder/go-freebsd-jails-exporter)](https://github.com/zombocoder/go-freebsd-jails-exporter/releases/latest)
+[![Go Report Card](https://goreportcard.com/badge/github.com/zombocoder/go-freebsd-jails-exporter)](https://goreportcard.com/report/github.com/zombocoder/go-freebsd-jails-exporter)
+[![License: BSD-2-Clause](https://img.shields.io/badge/License-BSD_2--Clause-orange.svg)](LICENSE)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/zombocoder/go-freebsd-jails-exporter)](go.mod)
+[![FreeBSD](https://img.shields.io/badge/FreeBSD-14%20%7C%2015-red.svg)](https://www.freebsd.org/)
+[![Prometheus exporter](https://img.shields.io/badge/Prometheus-exporter-E6522C?logo=prometheus&logoColor=white)](https://prometheus.io/)
+
 Prometheus exporter for FreeBSD jails using native cgo bindings. No shell commands are executed.
 
 All metrics include a `host` label (system hostname) so jails can be distinguished across multiple hosts in Prometheus/Grafana.
@@ -9,17 +17,74 @@ All metrics include a `host` label (system hostname) so jails can be distinguish
 
 ## Requirements
 
-- FreeBSD 13+ (optimized for 14.x)
-- Go 1.22+
+- FreeBSD 14 or 15 (tested in CI on 14.5 and 15.1)
+- Go 1.24+
 - CGO_ENABLED=1
 - Root privileges (required for full process visibility)
 - `kern.racct.enable=1` in `/boot/loader.conf` (for RACCT metrics, requires reboot)
+- FreeBSD source tree in `/usr/src` matching your installed release (build-time only, needed by the ZFS collector)
+
+### FreeBSD sources (`/usr/src`)
+
+The ZFS collector uses [go-freebsd-libzfs](https://github.com/zombocoder/go-freebsd-libzfs), which compiles against the OpenZFS headers from the FreeBSD source tree (`/usr/src/sys/contrib/openzfs/...`). The base system ships `/usr/include/libzfs.h`, but not the headers it includes, so without `/usr/src` the build fails with:
+
+```
+/usr/include/libzfs.h:40:10: fatal error: 'libshare.h' file not found
+```
+
+Install the sources for the release you are running:
+
+```sh
+# pkgbase systems
+pkg install FreeBSD-src-sys
+
+# or with git, using the branch that matches your release (e.g. 14.3)
+git clone --depth 1 -b releng/14.3 https://git.FreeBSD.org/src.git /usr/src
+```
+
+Keep the source version in line with the installed release, since the headers must match the `libzfs` you link against. The build should work once `/usr/src/sys/contrib/openzfs/lib/libspl/include/libshare.h` exists.
+
+## Install
+
+Prebuilt tarballs for FreeBSD 14 and 15 (amd64) are attached to each
+[release](https://github.com/zombocoder/go-freebsd-jails-exporter/releases). Each one contains the
+binary, the rc.d script, the Grafana dashboard and a SHA-256 checksum. Pick the
+one matching your FreeBSD major version, since the binary links against the base
+system's `libjail` and `libzfs`.
 
 ## Build
+
+With the [Makefile](Makefile), which also embeds the version, revision and build date:
+
+```bash
+make deps    # check Go, OpenZFS headers and RACCT
+make build
+```
+
+Or with plain `go build`:
 
 ```bash
 CGO_ENABLED=1 GOOS=freebsd GOARCH=amd64 go build -o go-freebsd-jails-exporter ./cmd/go-freebsd-jails-exporter/
 ```
+
+To embed the git revision and build date (shown in `--version` and the `freebsd_jails_exporter_build_info` metric):
+
+```bash
+CGO_ENABLED=1 go build \
+  -ldflags "-X github.com/zombocoder/go-freebsd-jails-exporter/pkg/version.Revision=$(git rev-parse --short HEAD) \
+            -X github.com/zombocoder/go-freebsd-jails-exporter/pkg/version.BuildDate=$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+  -o go-freebsd-jails-exporter ./cmd/go-freebsd-jails-exporter/
+```
+
+### Troubleshooting: `error obtaining VCS status: exit status 128`
+
+Go tries to stamp VCS information into the binary by calling `git`. This fails when `git` refuses to read the repository, most commonly when building as root in a clone owned by another user (git's `safe.directory` check). Any of these fixes it:
+
+- build as the user who owns the clone and use `doas`/`sudo` only to run the exporter
+- mark the clone as safe: `git config --global --add safe.directory /path/to/go-freebsd-jails-exporter`
+- disable VCS stamping: `go build -buildvcs=false ...`
+
+The exporter does not use Go's embedded VCS information (the revision comes from `-ldflags` above), so `-buildvcs=false` is safe.
 
 ## Usage
 
@@ -177,11 +242,27 @@ cp go-freebsd-jails-exporter /usr/local/bin/
 service go_freebsd_jails_exporter start
 ```
 
+Or `doas make install-service`, which installs both.
+
 ## Testing
 
 ```bash
-CGO_ENABLED=1 go test ./...
+make check         # gofmt, go mod tidy, vet, unit tests
+doas make smoke    # end-to-end test with a throwaway ZFS pool and jail (test machines only)
 ```
+
+CI runs both on FreeBSD 14.5 and 15.1 VMs for every pull request.
+
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for the
+development setup, tests and how to add a metric. Please follow the
+[Code of Conduct](CODE_OF_CONDUCT.md), and report security issues privately as
+described in [SECURITY.md](SECURITY.md). Changes are tracked in the
+[changelog](CHANGELOG.md).
+
+If the exporter is useful to you, a star on GitHub or a
+[coffee](https://buymeacoffee.com/zombocoder) helps keep it going.
 
 ## License
 

@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/zombocoder/go-freebsd-jails-exporter/security/advisories/new
+    about: Please report security problems privately, not as a public issue.
+  - name: ZFS library issues (go-freebsd-libzfs)
+    url: https://github.com/zombocoder/go-freebsd-libzfs/issues
+    about: Problems in the ZFS bindings themselves, independent of the exporter.
+  - name: Jail library issues (go-freebsd-jail)
+    url: https://github.com/zombocoder/go-freebsd-jail/issues
+    about: Problems in the jail bindings themselves, independent of the exporter.

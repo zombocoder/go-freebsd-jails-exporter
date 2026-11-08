@@ -96,7 +96,7 @@ func GetJailExtra(jid int) (*JailExtra, error) {
 
 	return &JailExtra{
 		Parent:    parent,
-		Persist:   persist == "1",
+		Persist:   ParseJailBool(persist),
 		OSRelease: C.GoString(&extra.osrelease[0]),
 		OSRelDate: osreldate,
 	}, nil
