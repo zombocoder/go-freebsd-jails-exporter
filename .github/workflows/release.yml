@@ -44,7 +44,7 @@ jobs:
           echo "REVISION=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
 
       - name: Build in FreeBSD VM
-        uses: vmactions/freebsd-vm@v1.5.9
+        uses: vmactions/freebsd-vm@c46abacb49f09938ca4e1702d15d836285d694cc # v1.5.9
         with:
           release: ${{ matrix.release }}
           envs: VERSION REVISION
