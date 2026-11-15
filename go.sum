@@ -40,8 +40,10 @@ github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu
 github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/xhit/go-str2duration/v2 v2.1.0 h1:lxklc02Drh6ynqX+DdPyp5pCKLUQpRT8bp8Ydu2Bstc=
 github.com/xhit/go-str2duration/v2 v2.1.0/go.mod h1:ohY8p+0f07DiV6Em5LKB0s2YpLtXVyJfNt1+BlmyAsU=
-github.com/zombocoder/go-freebsd-jail v1.0.0 h1:QwQbon4gExjH8n9PWytjJNhXi4ehR/cM+45/8QQTMEU=
-github.com/zombocoder/go-freebsd-jail v1.0.0/go.mod h1:FYCDxByrFg1ZUSz2+5kZyNLtXCnVSaZ8+LbjBem8nEs=
+github.com/zombocoder/go-freebsd-ifc v1.1.0 h1:iLKtPzK077TYR31G+irq6SHTBSUnzlQJPWDOtSPR6TQ=
+github.com/zombocoder/go-freebsd-ifc v1.1.0/go.mod h1:d57Ode6uQKV+FYn2e6CCQhKV5CGYjCS7Zq+9c3XWDRg=
+github.com/zombocoder/go-freebsd-jail v1.1.0 h1:w6/y4YxFDodYAcTSOFUU03KRSb30yZAuuUJdKw+69Jg=
+github.com/zombocoder/go-freebsd-jail v1.1.0/go.mod h1:P61oWnASkSfbNWIpVmmqOdhbuj32M7Qc7Ul/ul4FZuI=
 github.com/zombocoder/go-freebsd-libzfs v0.1.0 h1:bUKKMhfb7JgFrNDKLSYsiZTWCS9YAZxdJdQCyooR5z8=
 github.com/zombocoder/go-freebsd-libzfs v0.1.0/go.mod h1:DoUzdjK4qR3XYuEnzPHcjn9daBzZDTVxQqDHL6R1P7g=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
