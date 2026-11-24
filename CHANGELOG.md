@@ -8,6 +8,13 @@ under "Changed".
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-24
+
+### Added
+
+- The smoke test checks that RSS stays flat over 400 scrapes of a pool with
+  100 snapshots, so CI catches leaks like this one.
+
 ### Fixed
 
 - Memory leak in the ZFS collector ([#4](https://github.com/zombocoder/go-freebsd-jails-exporter/issues/4)):
@@ -15,11 +22,6 @@ under "Changed".
   iteration callbacks, so every scrape leaked one handle per dataset and
   snapshot on the host, and RSS grew without bound. Updated
   go-freebsd-libzfs to v0.4.0, which closes them.
-
-### Added
-
-- The smoke test checks that RSS stays flat over 400 scrapes of a pool with
-  100 snapshots, so CI catches leaks like this one.
 
 ## [0.3.0] - 2026-11-08
 
@@ -68,7 +70,8 @@ under "Changed".
   `host` label on all metrics.
 - Grafana dashboard, rc.d service script and unit tests.
 
-[Unreleased]: https://github.com/zombocoder/go-freebsd-jails-exporter/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/zombocoder/go-freebsd-jails-exporter/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/zombocoder/go-freebsd-jails-exporter/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/zombocoder/go-freebsd-jails-exporter/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/zombocoder/go-freebsd-jails-exporter/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/zombocoder/go-freebsd-jails-exporter/releases/tag/v0.1.0
