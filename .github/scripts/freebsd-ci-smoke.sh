@@ -57,15 +57,14 @@ zpool create -O mountpoint="/$POOL" "$POOL" "$DIR/disk0"
 zfs create -p -o compression=lz4 "$POOL/jails/$JAIL"
 
 # Snapshots make every dataset listing walk many more handles, so a leak in
-# ZFS iteration (see the memory check below) shows up quickly.
-snaps=""
+# ZFS iteration (see the memory check below) shows up quickly. One snapshot
+# per command: `zfs snapshot` refuses several snapshots of the same dataset.
 i=1
 while [ "$i" -le "$SNAPSHOTS" ]; do
-	snaps="$snaps $POOL/jails/$JAIL@smoke$i"
+	zfs snapshot "$POOL/jails/$JAIL@smoke$i"
 	i=$((i + 1))
 done
-# shellcheck disable=SC2086
-zfs snapshot $snaps
+echo "created $SNAPSHOTS snapshots"
 
 # A minimal jail root: /rescue is a statically linked multi-call binary that
 # picks its behavior from argv[0], so a copy named "sleep" is enough.
