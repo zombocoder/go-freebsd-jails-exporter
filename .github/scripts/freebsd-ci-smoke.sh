@@ -17,6 +17,13 @@ DIR=/var/tmp/$POOL
 JAIL=jexci
 ROOT=/$POOL/jails/$JAIL
 ADDR=127.0.0.1:19756
+SNAPSHOTS=100
+# Memory check: RSS may grow by at most MAX_GROWTH_KB over SCRAPES scrapes
+# after a warm-up. A leak of one libzfs handle per dataset per scrape (issue
+# #4) grows RSS by well over 100 MB here.
+WARMUP_SCRAPES=50
+SCRAPES=400
+MAX_GROWTH_KB=16384
 TMP=$(mktemp -d)
 EXPORTER_PID=
 
@@ -48,6 +55,16 @@ mkdir -p "$DIR"
 truncate -s 256m "$DIR/disk0"
 zpool create -O mountpoint="/$POOL" "$POOL" "$DIR/disk0"
 zfs create -p -o compression=lz4 "$POOL/jails/$JAIL"
+
+# Snapshots make every dataset listing walk many more handles, so a leak in
+# ZFS iteration (see the memory check below) shows up quickly. One snapshot
+# per command: `zfs snapshot` refuses several snapshots of the same dataset.
+i=1
+while [ "$i" -le "$SNAPSHOTS" ]; do
+	zfs snapshot "$POOL/jails/$JAIL@smoke$i"
+	i=$((i + 1))
+done
+echo "created $SNAPSHOTS snapshots"
 
 # A minimal jail root: /rescue is a statically linked multi-call binary that
 # picks its behavior from argv[0], so a copy named "sleep" is enough.
@@ -102,6 +119,31 @@ echo "ok: persist flag reported"
 errors=$(grep -E '^freebsd_jails_exporter_scrape_errors_total' "$TMP/metrics" | awk '$2 != 0')
 [ -z "$errors" ] || fail "collectors reported scrape errors: $errors"
 echo "ok: no scrape errors"
+
+# scrape <count>: fetch /metrics count times.
+scrape() {
+	n=0
+	while [ "$n" -lt "$1" ]; do
+		fetch -qo /dev/null "http://$ADDR/metrics" || fail "/metrics failed during memory check"
+		n=$((n + 1))
+	done
+}
+rss_kb() {
+	ps -o rss= -p "$EXPORTER_PID" | tr -d ' '
+}
+
+echo "--- memory check ($SCRAPES scrapes, $SNAPSHOTS snapshots)"
+scrape "$WARMUP_SCRAPES"
+rss_before=$(rss_kb)
+start=$(date +%s)
+scrape "$SCRAPES"
+rss_after=$(rss_kb)
+elapsed=$(($(date +%s) - start))
+growth=$((rss_after - rss_before))
+echo "RSS: ${rss_before} KB -> ${rss_after} KB (growth ${growth} KB) in ${elapsed}s"
+[ "$growth" -le "$MAX_GROWTH_KB" ] ||
+	fail "RSS grew by ${growth} KB over $SCRAPES scrapes (limit ${MAX_GROWTH_KB} KB): memory leak?"
+echo "ok: memory stable"
 
 echo "--- jail metrics"
 grep -E "name=\"$JAIL\"" "$TMP/metrics" | grep -v '_by_state' | head -40
