@@ -8,6 +8,19 @@ under "Changed".
 
 ## [Unreleased]
 
+### Fixed
+
+- Memory leak in the ZFS collector ([#4](https://github.com/zombocoder/go-freebsd-jails-exporter/issues/4)):
+  go-freebsd-libzfs v0.1.0 never closed the libzfs handles passed to dataset
+  iteration callbacks, so every scrape leaked one handle per dataset and
+  snapshot on the host, and RSS grew without bound. Updated
+  go-freebsd-libzfs to v0.4.0, which closes them.
+
+### Added
+
+- The smoke test checks that RSS stays flat over 400 scrapes of a pool with
+  100 snapshots, so CI catches leaks like this one.
+
 ## [0.3.0] - 2026-11-08
 
 ### Added
